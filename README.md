@@ -11,16 +11,21 @@ npm install --save md-react-router
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React from 'react'
+import { getRoutes } from 'md-react-router'
+import Header from './components/header'
+import Routes from './Routes'
 
-import MyComponent from 'md-react-router'
-import 'md-react-router/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <div>{getRoutes(Routes)}</div>
-  }
+const App = () => {
+  return (
+    <div className='App'>
+      <Header />
+      <div>{getRoutes(Routes)}</div>
+    </div>
+  )
 }
+
+export default App
 ```
 
 ## License
