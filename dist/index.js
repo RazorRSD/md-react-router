@@ -54,20 +54,23 @@ var Router = function Router(_ref) {
   if (currentHash) {
     var _hashReader = hashReader(currentHash),
       letters = _hashReader.letters;
-    if (letters === hash) return children;else return React__default.createElement(React__default.Fragment, null);
+    if (letters === hash) return children;else return null;
   } else {
-    return currentPath === path ? children : React__default.createElement(React__default.Fragment, null);
+    return currentPath === path ? children : null;
   }
 };
 
-var getRoutes = function getRoutes(routes) {
+var getRoutes = function getRoutes(routes, notFound) {
+  var notFoundComp = function notFoundComp() {
+    return notFound ? notFound : React__default.createElement("div", null, "404");
+  };
   return routes.map(function (prop, key) {
-    return React__default.createElement(Router, {
+    return Router ? React__default.createElement(Router, {
       path: prop.path,
       hash: prop.hash,
       key: key,
       onCallback: prop.onCallback
-    }, React__default.createElement(prop.component, null));
+    }, React__default.createElement(prop.component, null)) : notFoundComp;
   });
 };
 

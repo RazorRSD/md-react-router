@@ -1,40 +1,37 @@
 import React, { useState, useEffect } from 'react';
 
-var hashReader = function hashReader(str) {
+const hashReader = str => {
   var _str$match, _str$match2;
-  var patt1 = /[0-9]/g;
-  var patt2 = /[a-zA-Z]/g;
+  const patt1 = /[0-9]/g;
+  const patt2 = /[a-zA-Z]/g;
   if (!str) return {
     numbers: '',
     letters: ''
   };
-  var letters = (_str$match = str.match(patt2)) === null || _str$match === void 0 ? void 0 : _str$match.join('');
-  var digits = (_str$match2 = str.match(patt1)) === null || _str$match2 === void 0 ? void 0 : _str$match2.join('');
+  const letters = (_str$match = str.match(patt2)) === null || _str$match === void 0 ? void 0 : _str$match.join('');
+  const digits = (_str$match2 = str.match(patt1)) === null || _str$match2 === void 0 ? void 0 : _str$match2.join('');
   return {
-    letters: letters,
-    digits: digits
+    letters,
+    digits
   };
 };
-var Router = function Router(_ref) {
-  var path = _ref.path,
-    hash = _ref.hash,
-    children = _ref.children,
-    onCallback = _ref.onCallback;
-  var _useState = useState(window.location.pathname),
-    currentPath = _useState[0],
-    setCurrentPath = _useState[1];
-  var _useState2 = useState(window.location.hash),
-    currentHash = _useState2[0],
-    setCurrentHash = _useState2[1];
-  useEffect(function () {
-    var onLocationChange = function onLocationChange() {
+const Router = ({
+  path,
+  hash,
+  children,
+  onCallback
+}) => {
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+  const [currentHash, setCurrentHash] = useState(window.location.hash);
+  useEffect(() => {
+    const onLocationChange = () => {
       setCurrentPath(window.location.pathname);
       setCurrentHash(window.location.hash);
       {
         onCallback ? onCallback() : null;
       }
     };
-    var onHashChange = function onHashChange() {
+    const onHashChange = () => {
       setCurrentPath(window.location.pathname);
       setCurrentHash(window.location.hash);
       {
@@ -43,36 +40,41 @@ var Router = function Router(_ref) {
     };
     window.addEventListener('popstate', onLocationChange);
     window.addEventListener('hashchange', onHashChange);
-    return function () {
+    return () => {
       window.removeEventListener('popstate', onLocationChange);
       window.removeEventListener('hashchange', onHashChange);
     };
   }, []);
   if (currentHash) {
-    var _hashReader = hashReader(currentHash),
-      letters = _hashReader.letters;
-    if (letters === hash) return children;else return React.createElement(React.Fragment, null);
+    const {
+      letters
+    } = hashReader(currentHash);
+    if (letters === hash) return children;else return null;
   } else {
-    return currentPath === path ? children : React.createElement(React.Fragment, null);
+    return currentPath === path ? children : null;
   }
 };
 
-var getRoutes = function getRoutes(routes) {
-  return routes.map(function (prop, key) {
-    return React.createElement(Router, {
+const getRoutes = (routes, notFound) => {
+  const notFoundComp = () => {
+    return notFound ? notFound : React.createElement("div", null, "404");
+  };
+  return routes.map((prop, key) => {
+    return Router ? React.createElement(Router, {
       path: prop.path,
       hash: prop.hash,
       key: key,
       onCallback: prop.onCallback
-    }, React.createElement(prop.component, null));
+    }, React.createElement(prop.component, null)) : notFoundComp;
   });
 };
 
-var Link = function Link(_ref) {
-  var className = _ref.className,
-    href = _ref.href,
-    children = _ref.children,
-    onClick = _ref.onClick;
+const Link = ({
+  className,
+  href,
+  children,
+  onClick
+}) => {
   function dispatchHashchange() {
     if (typeof HashChangeEvent !== 'undefined') {
       window.dispatchEvent(new HashChangeEvent('hashchange'));
@@ -84,11 +86,11 @@ var Link = function Link(_ref) {
     } catch (error) {
       console.log(error);
     }
-    var ieEvent = document.createEvent('Event');
+    const ieEvent = document.createEvent('Event');
     ieEvent.initEvent('hashchange', true, true);
     window.dispatchEvent(ieEvent);
   }
-  var onClickLink = function onClickLink(event) {
+  const onClickLink = event => {
     event.preventDefault();
     dispatchHashchange();
     if (event.metaKey || event.ctrlKey) {
@@ -98,7 +100,7 @@ var Link = function Link(_ref) {
       onClick ? onClick() : null;
     }
     window.history.pushState({}, '', href);
-    var navEvent = new PopStateEvent('popstate');
+    const navEvent = new PopStateEvent('popstate');
     window.dispatchEvent(navEvent);
   };
   return React.createElement("a", {

@@ -4,5 +4,5 @@ declare const Router: (props: {
     hash?: string;
     onCallback?: () => void;
     children: React.ReactNode;
-}) => JSX.Element;
+}) => JSX.Element | null;
 export default Router;

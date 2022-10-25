@@ -14,7 +14,7 @@ const Router: (props: {
   hash?: string
   onCallback?: () => void
   children: React.ReactNode
-}) => JSX.Element = ({ path, hash, children, onCallback }) => {
+}) => JSX.Element | null = ({ path, hash, children, onCallback }) => {
   const [currentPath, setCurrentPath] = useState(window.location.pathname)
   const [currentHash, setCurrentHash] = useState(window.location.hash)
 
@@ -44,13 +44,9 @@ const Router: (props: {
   if (currentHash) {
     const { letters } = hashReader(currentHash)
     if (letters === hash) return children as JSX.Element
-    else return <React.Fragment></React.Fragment>
+    else return null
   } else {
-    return currentPath === path ? (
-      (children as JSX.Element)
-    ) : (
-      <React.Fragment></React.Fragment>
-    )
+    return currentPath === path ? (children as JSX.Element) : null
   }
 }
 

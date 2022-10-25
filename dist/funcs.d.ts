@@ -4,5 +4,5 @@ declare const getRoutes: (routes: {
     hash?: string;
     component: React.FunctionComponent;
     onCallback?: () => void;
-}[]) => JSX.Element[];
+}[], notFound?: React.FunctionComponent<{}> | undefined) => (JSX.Element | (() => React.FunctionComponent<{}> | JSX.Element))[];
 export default getRoutes;

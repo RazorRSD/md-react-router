@@ -7,10 +7,14 @@ const getRoutes = (
     hash?: string
     component: React.FunctionComponent
     onCallback?: () => void
-  }[]
+  }[],
+  notFound?: React.FunctionComponent
 ) => {
+  const notFoundComp = () => {
+    return notFound ? notFound : <div>404</div>
+  }
   return routes.map((prop, key) => {
-    return (
+    return Router ? (
       <Router
         path={prop.path}
         hash={prop.hash}
@@ -19,6 +23,8 @@ const getRoutes = (
       >
         <prop.component />
       </Router>
+    ) : (
+      notFoundComp
     )
   })
 }

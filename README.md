@@ -10,6 +10,33 @@ npm install --save md-react-router
 
 ## Usage
 
+-- Add your routes list in `routes.js` file
+
+```ts
+import { Home, About, Contact, TestHash } from './pages'
+
+export const routes = [
+  {
+    path: '/',
+    component: Home
+  },
+  {
+    path: '/about',
+    component: About
+  },
+  {
+    path: '/contact',
+    component: Contact
+  },
+  {
+    hash: 'test',
+    component: TestHash
+  }
+]
+```
+
+-- Add `Router` component in your `App.js` file
+
 ```tsx
 import React from 'react'
 import { getRoutes } from 'md-react-router'
@@ -26,6 +53,26 @@ const App = () => {
 }
 
 export default App
+```
+
+-- Use "Link" instead of "A" when you want to navigate to another page
+
+```tsx
+import React from 'react'
+import { Link } from 'md-react-router'
+
+const Header = () => {
+  return (
+    <div>
+      <Link to='/'>Home</Link>
+      <Link to='/about'>About</Link>
+      <Link to='/contact'>Contact</Link>
+      <Link to='#test'>Test Hash</Link>
+    </div>
+  )
+}
+
+export default Header
 ```
 
 ## License
