@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
 
-const Link = ({
-  className,
-  href,
-  children,
-  onClick
-}) => {
+var Link = function Link(_ref) {
+  var className = _ref.className,
+    href = _ref.href,
+    children = _ref.children,
+    onClick = _ref.onClick;
   function dispatchHashchange() {
     if (typeof HashChangeEvent !== 'undefined') {
       window.dispatchEvent(new HashChangeEvent('hashchange'));
@@ -17,11 +16,11 @@ const Link = ({
     } catch (error) {
       console.log(error);
     }
-    const ieEvent = document.createEvent('Event');
+    var ieEvent = document.createEvent('Event');
     ieEvent.initEvent('hashchange', true, true);
     window.dispatchEvent(ieEvent);
   }
-  const onClickLink = event => {
+  var onClickLink = function onClickLink(event) {
     event.preventDefault();
     dispatchHashchange();
     if (event.metaKey || event.ctrlKey) {
@@ -31,7 +30,7 @@ const Link = ({
       onClick ? onClick() : null;
     }
     window.history.pushState({}, '', href);
-    const navEvent = new PopStateEvent('popstate');
+    var navEvent = new PopStateEvent('popstate');
     window.dispatchEvent(navEvent);
   };
   return React.createElement("a", {
@@ -41,43 +40,43 @@ const Link = ({
   }, children);
 };
 
-const ctx = {
+var ctx = {
   query: {}
 };
-const reset = () => {
+var reset = function reset() {
   ctx.query = {};
 };
 
-const hashReader = str => {
+var hashReader = function hashReader(str) {
   var _str$match, _str$match2;
-  const patt1 = /[0-9]/g;
-  const patt2 = /[a-zA-Z]/g;
+  var patt1 = /[0-9]/g;
+  var patt2 = /[a-zA-Z]/g;
   if (!str) return {
     numbers: '',
     letters: ''
   };
-  const letters = (_str$match = str.match(patt2)) === null || _str$match === void 0 ? void 0 : _str$match.join('');
-  const digits = (_str$match2 = str.match(patt1)) === null || _str$match2 === void 0 ? void 0 : _str$match2.join('');
+  var letters = (_str$match = str.match(patt2)) === null || _str$match === void 0 ? void 0 : _str$match.join('');
+  var digits = (_str$match2 = str.match(patt1)) === null || _str$match2 === void 0 ? void 0 : _str$match2.join('');
   return {
-    letters,
-    digits
+    letters: letters,
+    digits: digits
   };
 };
-const comparePaths = (path, dynamicPath) => {
-  const pathSplit = path.split('/');
-  const dynamicPathSplit = dynamicPath.split('/');
+var comparePaths = function comparePaths(path, dynamicPath) {
+  var pathSplit = path.split('/');
+  var dynamicPathSplit = dynamicPath.split('/');
   if (pathSplit.length !== dynamicPathSplit.length) return false;
-  let isMatch = true;
-  pathSplit.forEach((item, index) => {
+  var isMatch = true;
+  pathSplit.forEach(function (item, index) {
     var _dynamicPathSplit$ind;
     if (item !== dynamicPathSplit[index] && !((_dynamicPathSplit$ind = dynamicPathSplit[index]) !== null && _dynamicPathSplit$ind !== void 0 && _dynamicPathSplit$ind.includes(':'))) {
       isMatch = false;
     }
   });
   if (isMatch) {
-    dynamicPathSplit.map((item, index) => {
+    dynamicPathSplit.map(function (item, index) {
       if (item.includes(':')) {
-        const key = item.replace(':', '');
+        var key = item.replace(':', '');
         ctx.query[key] = pathSplit[index];
         console.log('ctx', ctx);
       }
@@ -85,48 +84,57 @@ const comparePaths = (path, dynamicPath) => {
   }
   return isMatch;
 };
-const Router = (Routes, NotFound) => {
-  const [currentPath, setCurrentPath] = useState(window.location.pathname);
-  const [currentHash, setCurrentHash] = useState(window.location.hash);
-  const getCorrect = path => {
-    const {
-      letters,
-      digits
-    } = hashReader(currentHash);
+var Router = function Router(Routes, NotFound) {
+  var _useState = useState(window.location.pathname),
+    currentPath = _useState[0],
+    setCurrentPath = _useState[1];
+  var _useState2 = useState(window.location.hash),
+    currentHash = _useState2[0],
+    setCurrentHash = _useState2[1];
+  var getCorrect = function getCorrect(path) {
+    var _hashReader = hashReader(currentHash),
+      letters = _hashReader.letters,
+      digits = _hashReader.digits;
     if (letters && digits) {
-      const correchash = Routes.find(item => item.hash === letters);
+      var correchash = Routes.find(function (item) {
+        return item.hash === letters;
+      });
       return (correchash === null || correchash === void 0 ? void 0 : correchash.children) || NotFound;
     }
-    const dynamicPath = Routes.filter(item => {
+    var dynamicPath = Routes.filter(function (item) {
       var _item$path;
       return (_item$path = item.path) === null || _item$path === void 0 ? void 0 : _item$path.includes(':');
     });
-    const testChil = dynamicPath.map(item => {
+    var testChil = dynamicPath.map(function (item) {
       if (comparePaths(path, item.path || '')) {
         return item.children;
       }
       return null;
     });
-    const finChil = testChil.filter(item => item);
+    var finChil = testChil.filter(function (item) {
+      return item;
+    });
     if (finChil.length > 0) {
       return finChil[0];
     }
-    const correct = Routes.find(item => item.path === path);
+    var correct = Routes.find(function (item) {
+      return item.path === path;
+    });
     return (correct === null || correct === void 0 ? void 0 : correct.children) || NotFound;
   };
-  useEffect(() => {
-    const onLocationChange = () => {
+  useEffect(function () {
+    var onLocationChange = function onLocationChange() {
       reset();
       setCurrentPath(window.location.pathname);
       setCurrentHash(window.location.hash);
     };
-    const onHashChange = () => {
+    var onHashChange = function onHashChange() {
       setCurrentPath(window.location.pathname);
       setCurrentHash(window.location.hash);
     };
     window.addEventListener('popstate', onLocationChange);
     window.addEventListener('hashchange', onHashChange);
-    return () => {
+    return function () {
       window.removeEventListener('popstate', onLocationChange);
       window.removeEventListener('hashchange', onHashChange);
     };
