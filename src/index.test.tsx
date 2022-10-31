@@ -1,7 +1,5 @@
-import { ExampleComponent } from '.'
+import { ctx } from '.'
 
 describe('ExampleComponent', () => {
-  it('is truthy', () => {
-    expect(ExampleComponent).toBeTruthy()
-  })
+  console.log(ctx)
 })
