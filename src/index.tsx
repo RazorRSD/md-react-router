@@ -1,5 +1,5 @@
-import getRoutes from './funcs'
 import Link from './Link'
 import Router from './Router'
+import { ctx } from './store'
 
-export { Link, Router, getRoutes }
+export { Link, Router, ctx }

@@ -1,8 +1,7 @@
 import React from 'react';
-declare const Router: (props: {
+declare const Router: (Routes: {
     path?: string;
     hash?: string;
-    onCallback?: () => void;
     children: React.ReactNode;
-}) => JSX.Element | null;
+}[], NotFound: React.ReactNode) => JSX.Element;
 export default Router;

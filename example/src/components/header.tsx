@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'md-react-router'
+import { Link, ctx } from 'md-react-router'
 
 const Header = () => {
   const onChange = () => {
@@ -7,6 +7,7 @@ const Header = () => {
   }
   return (
     <header>
+      {'test =>' + ctx.query.id}
       <h1>My App</h1>
       <Link href='/test' className='test-link'>
         Test
@@ -16,6 +17,9 @@ const Header = () => {
       </Link>
       <Link href='/#ct4200' className='test-link'>
         certs
+      </Link>
+      <Link href='/testDyn/333333333' className='test-link'>
+        Dyn
       </Link>
 
       <button className='test-link' onClick={onChange}>

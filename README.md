@@ -10,44 +10,51 @@ npm install --save md-react-router
 
 ## Usage
 
--- Add your routes list in `routes.js` file
+_Add your routes list in `routes.js` file_
 
 ```ts
-import { Home, About, Contact, TestHash } from './pages'
+import { Home, About, TestHash, ItemCategories, Item } from './pages'
 
 export const routes = [
   {
     path: '/',
-    component: Home
+    children: <Home />
   },
   {
     path: '/about',
-    component: About
+    children: <About />
+  },
+  //Use Hash to redirect: page will be desided on letters and you can pass a id using numbers after letters
+  {
+    hash: 'ct',
+    children: <TestHash />
+  },
+  //You can add Dynamic Routing with ":" name
+  {
+    path: '/testDyn/:catid',
+    children: <ItemCategories />
   },
   {
-    path: '/contact',
-    component: Contact
-  },
-  {
-    hash: 'test',
-    component: TestHash
+    path: '/testDyn/:id/details',
+    children: <Item />
   }
 ]
 ```
 
--- Add `Router` component in your `App.js` file
+_Add `Router` component in your `App.js` file_
 
 ```tsx
 import React from 'react'
-import { getRoutes } from 'md-react-router'
+import { Router } from 'md-react-router'
 import Header from './components/header'
+import NotFound from './componets/NotFoundComp'
 import Routes from './Routes'
 
 const App = () => {
   return (
     <div className='App'>
       <Header />
-      <div>{getRoutes(Routes)}</div>
+      <div>{getRoutes(Routes, NotFound)}</div>
     </div>
   )
 }
@@ -55,7 +62,7 @@ const App = () => {
 export default App
 ```
 
--- Use "Link" instead of "A" when you want to navigate to another page
+_Use "Link" instead of "A" when you want to navigate to another page_
 
 ```tsx
 import React from 'react'
@@ -68,11 +75,26 @@ const Header = () => {
       <Link to='/about'>About</Link>
       <Link to='/contact'>Contact</Link>
       <Link to='#test'>Test Hash</Link>
+      <Link to='/TestDyn/234'>Category 01</Link>
+      <Link to='/testDyn/562/details'>Item X</Link>
     </div>
   )
 }
 
 export default Header
+```
+
+_You can ust ctx to get query values from router_
+
+```tsx
+import React from 'react'
+import { ctx } from 'md-react-router'
+
+const Item = () => {
+  return <div>testDyn {ctx.query.id}</div>
+}
+
+export default Item
 ```
 
 ## License
